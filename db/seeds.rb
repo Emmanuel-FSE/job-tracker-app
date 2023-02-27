@@ -13,7 +13,7 @@ end
 20.times do
   job = Job.create!(
     title: Faker::Job.title,
-    description: Faker::Job.field,
+    description: Faker::Lorem.paragraphs(number: 2).join("\n\n"),
     company: Faker::Company.name,
     location: Faker::Address.city,
     salary: rand(100000..200000)
@@ -23,9 +23,10 @@ end
     user = users.sample
     Application.create!(
       applicant_name: user.name,
-      description: Faker::Lorem.sentence,
+      description: Faker::Lorem.paragraphs(number: rand(1..3)).join("\n\n"),
       job_id: job.id,
-      user_id: user.id
+      user_id: user.id,
+      job_title: job.title
     )
   end
 end
