@@ -12,6 +12,8 @@ gem 'webrick'
 
 gem 'rack-contrib'
 
+gem 'rack-cors'
+
 gem "sqlite3"
 
 gem "require_all"

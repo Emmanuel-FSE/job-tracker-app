@@ -7,6 +7,13 @@ class ApplicationController < Sinatra::Base
                 'Access-Control-Allow-Headers' => 'Content-Type'
     end
 
+    use Rack::Cors do
+        allow do
+          origins ''
+          resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
+        end
+    end
+
     get '/jobs' do
         jobs = Job.all.order(:created_at)
   
@@ -33,6 +40,32 @@ class ApplicationController < Sinatra::Base
         applications = Application.all.order(:created_at)
 
         applications.to_json
+    end
+
+    get '/jobs/applications/:id' do
+        job = Job.find(params[:id])
+        applications = job.applications.to_json
+    end
+
+    get '/users/applications/:id' do
+        user = User.find(params[:id])
+        applications = user.applications.to_json
+    end
+
+    post '/applications' do
+        application = Application.create(
+         applicant_name: params[:applicant_name],
+         job_title: params[:job_title],
+         description: params[:description],
+         user_id: params[:user_id],
+         job_id: params[:job_id]) 
+        application.to_json
+    end
+
+    delete '/applications/:id' do
+        application = Application.find(params[:id])
+        application.delete
+        "Deleted #{application.title}"
     end
 
 end
