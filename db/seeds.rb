@@ -5,7 +5,8 @@ users = []
   user = User.create!(
     name: Faker::Name.name,
     email: Faker::Internet.email,
-    rank: "applicant"
+    rank: "applicant",
+    password: Faker::Internet.password(8, true, true)
   )
   users << user
 end
