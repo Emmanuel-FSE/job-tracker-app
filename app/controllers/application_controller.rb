@@ -24,8 +24,8 @@ class ApplicationController < Sinatra::Base
         users.to_json
     end
 
-    get '/users/:id' do
-        user = User.find(params[:id]) 
+    get '/users/:email' do
+        user = User.find_by(email: params[:email]) 
         user.to_json
     end
 
