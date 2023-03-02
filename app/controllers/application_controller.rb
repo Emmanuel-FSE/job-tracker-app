@@ -2,7 +2,7 @@ class ApplicationController < Sinatra::Base
     set :default_content_type, 'application/json'
 
     get '/jobs' do
-        jobs = Job.all.order(:created_at)
+        jobs = Job.all.order(created_at: :desc)
   
         jobs.to_json
     end
@@ -92,7 +92,7 @@ class ApplicationController < Sinatra::Base
     end
 
     get '/applications' do
-        applications = Application.all.order(:created_at)
+        applications = Application.all.order(created_at: :desc)
 
         applications.to_json
     end
@@ -114,7 +114,7 @@ class ApplicationController < Sinatra::Base
 
     get '/users/applications/:id' do
         user = User.find(params[:id])
-        applications = user.applications.to_json
+        applications = user.applications.order(created_at: :desc).to_json
     end
 
     post '/applications' do
