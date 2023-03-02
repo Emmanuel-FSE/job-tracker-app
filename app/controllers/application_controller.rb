@@ -1,19 +1,6 @@
 class ApplicationController < Sinatra::Base
     set :default_content_type, 'application/json'
 
-    # use Rack::Cors do
-    #     allow do
-    #       origins ''
-    #       resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
-    #     end
-    # end
-
-    # before do
-    #     headers 'Access-Control-Allow-Origin' => '*',
-    #             'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'],
-    #             'Access-Control-Allow-Headers' => 'Content-Type'
-    # end
-
     get '/jobs' do
         jobs = Job.all.order(:created_at)
   
@@ -84,6 +71,24 @@ class ApplicationController < Sinatra::Base
     get '/users/:email' do
         user = User.find_by(email: params[:email]) 
         user.to_json
+    end
+
+    post '/users' do
+      begin
+          user = User.create!(
+            name: params[:name],
+            email: params[:email],
+            rank: "applicant",
+            password: params[:password]
+          )
+          { success: true, message: "User created", user: user }.to_json
+        rescue ActiveRecord::RecordInvalid => e
+          status 422
+          { success: false, error: e.record.errors.full_messages }.to_json
+        rescue => e
+          status 500
+          { success: false, error: e.message }.to_json
+        end
     end
 
     get '/applications' do
